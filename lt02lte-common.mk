@@ -20,12 +20,16 @@ $(call inherit-product-if-exists, vendor/samsung/lt02lte-common/lt02lte-common-v
 # Overlays
 DEVICE_PACKAGE_OVERLAYS += device/samsung/lt02lte-common/overlay
 
-PRODUCT_AAPT_CONFIG := normal large tvdpi hdpi
-PRODUCT_AAPT_PREF_CONFIG := tvdpi
+#PRODUCT_AAPT_CONFIG := normal large tvdpi hdpi
+#PRODUCT_AAPT_PREF_CONFIG := tvdpi
+PRODUCT_AAPT_CONFIG := normal hdpi
+PRODUCT_AAPT_PREF_CONFIG := hdpi
+ # Galaxy Tab uses high-density artwork where available
+PRODUCT_LOCALES += hdpi
 
 # Boot animation
-TARGET_SCREEN_HEIGHT := 1920
-TARGET_SCREEN_WIDTH := 1080
+TARGET_SCREEN_HEIGHT := 1024
+TARGET_SCREEN_WIDTH := 600
 
 # Audio configuration
 PRODUCT_COPY_FILES += \
@@ -182,4 +186,4 @@ ADDITIONAL_DEFAULT_PROPERTIES += \
 $(call inherit-product, device/samsung/msm8930-common/msm8930.mk)
 
 # call dalvik heap config
-$(call inherit-product, frameworks/native/build/tablet-7in-hdpi-1024-dalvik-heap.mk)
+$(call inherit-product, frameworks/native/build/phone-hdpi-512-dalvik-heap.mk)
