@@ -20,12 +20,9 @@ $(call inherit-product-if-exists, vendor/samsung/lt02lte-common/lt02lte-common-v
 # Overlays
 DEVICE_PACKAGE_OVERLAYS += device/samsung/lt02lte-common/overlay
 
-#PRODUCT_AAPT_CONFIG := normal large tvdpi hdpi
-#PRODUCT_AAPT_PREF_CONFIG := tvdpi
-PRODUCT_AAPT_CONFIG := normal hdpi
-PRODUCT_AAPT_PREF_CONFIG := hdpi
- # Galaxy Tab uses high-density artwork where available
-PRODUCT_LOCALES += hdpi
+PRODUCT_AAPT_CONFIG := large mdpi hdpi xhdpi
+PRODUCT_AAPT_PREF_CONFIG := mdpi
+PRODUCT_LOCALES += mdpi
 
 # Boot animation
 TARGET_SCREEN_HEIGHT := 1024
@@ -142,7 +139,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
     persist.radio.dont_use_dsd=true \
     persist.radio.apm_sim_not_pwdn=1 \
     ro.qualcomm.bt.hci_transport=smd \
-    ro.sf.lcd_density=240 \
+    ro.sf.lcd_density=160 \
     ro.ril.transmitpower=true \
     ro.warmboot.capability=1 \
     ro.qualcomm.cabl=0 \
@@ -157,17 +154,6 @@ PRODUCT_PROPERTY_OVERRIDES += \
     ro.use_data_netmgrd=true \
     lpa.decode=true \
     lpa.use-stagefright=true \
-    rild.libpath=/system/lib/libril-qc-qmi-1.so \
-    persist.rild.nitz_plmn="" \
-    persist.rild.nitz_long_ons_0="" \
-    persist.rild.nitz_long_ons_1="" \
-    persist.rild.nitz_long_ons_2="" \
-    persist.rild.nitz_long_ons_3="" \
-    persist.rild.nitz_short_ons_0="" \
-    persist.rild.nitz_short_ons_1="" \
-    persist.rild.nitz_short_ons_2="" \
-    persist.rild.nitz_short_ons_3="" \
-    ril.subscription.types=NV,RUIM \
     persist.gps.qmienabled=true \
     persist.gps.qc_nlp_in_use=0 \
     persist.fuse_sdcard=true \
