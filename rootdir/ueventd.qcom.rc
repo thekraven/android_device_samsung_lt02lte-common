@@ -87,6 +87,13 @@
 /dev/msm_vidc_enc         0660   system     audio
 /dev/msm_rotator          0660   system     system
 /dev/hw_random            0660   system     system
+/dev/tima                 0666   root       root
+/dev/qseecom              0660   system     drmrpc
+/dev/ttyUSB*              0666   system     usb
+/dev/msm_rtac             0660  system      audio
+/dev/audience_a2220         0660  system       audio
+/dev/hidraw*              0660   root       system
+/dev/usb/lp*              0660   system     usb
 /dev/graphics/*           0660   system     graphics
 /dev/tun                  0660   system     vpn
 
