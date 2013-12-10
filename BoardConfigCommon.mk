@@ -49,6 +49,7 @@ BOARD_HAS_NO_MISC_PARTITION := true
 TARGET_RECOVERY_FSTAB := device/samsung/lt02lte-common/rootdir/fstab.qcom
 TARGET_RECOVERY_INITRC := device/samsung/lt02lte-common/rootdir/init.recovery.rc
 TARGET_RECOVERY_LCD_BACKLIGHT_PATH := \"/sys/class/lcd/panel/backlight\"
+COMMON_GLOBAL_CFLAGS += -DNO_SECURE_DISCARD
 
 TARGET_USERIMAGES_USE_EXT4 := true
 BOARD_BOOTIMAGE_PARTITION_SIZE := 10485760

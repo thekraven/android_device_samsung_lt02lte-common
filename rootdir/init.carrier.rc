@@ -25,13 +25,12 @@
 # ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
 on init
-
-    #For Absolute Persistence Partition
+    # For Absolute Persistence Partition
     mkdir /persdata 0755 system system
     mkdir /persdata/absolute 0750 system system
 
-    wait /dev/block/platform/msm_sdcc.1/by-name/persdata
-    mount ext4 /dev/block/platform/msm_sdcc.1/by-name/persdata  /persdata/absolute nosuid nodev barrier=1
+    wait /dev/block/mmcblk0p20
+    mount ext4 /dev/block/mmcblk0p20 /persdata/absolute nosuid nodev barrier=1
     chown system system /persdata
     chmod 0755 /persdata
     chown system system /persdata/absolute
@@ -40,7 +39,7 @@ on init
 on boot
     chown system system /sys/class/leds/button-backlight/brightness
 
-    # Permissions for bluetooth.
+    # Permissions for bluetooth
     setprop ro.bt.bdaddr_path "/efs/bluetooth/bt_addr"
     chown bluetooth net_bt_stack ro.bt.bdaddr_path
     chown bluetooth net_bt_stack /dev/ttyHS0
@@ -72,5 +71,7 @@ on boot
     setprop net.tcp.buffersize.edge    4093,26280,35040,4096,16384,35040
     setprop net.tcp.buffersize.gprs    4092,8760,11680,4096,8760,11680
     setprop net.tcp.buffersize.evdo_b  4094,87380,262144,4096,16384,262144
-	
 
+    # efs
+    mkdir /efs/drm 0700 system system
+    mkdir /efs/imei 0775 radio radio
