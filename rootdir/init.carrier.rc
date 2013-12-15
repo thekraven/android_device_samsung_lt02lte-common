@@ -25,6 +25,7 @@
 # ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
 on init
+    export BOOTCLASSPATH /system/framework/core.jar:/system/framework/core-junit.jar:/system/framework/bouncycastle.jar:/system/framework/ext.jar:/system/framework/framework.jar:/system/framework/framework2.jar:/system/framework/telephony-common.jar:/system/framework/mms-common.jar:/system/framework/android.policy.jar:/system/framework/services.jar:/system/framework/apache-xml.jar:/system/framework/sec_edm.jar:/system/framework/seccamera.jar:/system/framework/scrollpause.jar:/system/framework/stayrotation.jar:/system/framework/smartfaceservice.jar:/system/framework/secocsp.jar:/system/framework/abt-persistence.jar:/system/framework/sc.jar
     # For Absolute Persistence Partition
     mkdir /persdata 0755 system system
     mkdir /persdata/absolute 0750 system system
@@ -36,18 +37,72 @@ on init
     chown system system /persdata/absolute
     chmod 0750 /persdata/absolute
 
+on early-boot
+    chown bluetooth net_bt_stack /dev/ttyHS0
+    chmod 0660 /dev/ttyHS0
 on boot
     chown system system /sys/class/leds/button-backlight/brightness
 
     # Permissions for bluetooth
     setprop ro.bt.bdaddr_path "/efs/bluetooth/bt_addr"
     chown bluetooth net_bt_stack ro.bt.bdaddr_path
-    chown bluetooth net_bt_stack /dev/ttyHS0
-    chmod 0660 /dev/ttyHS0
     chmod 0660 /sys/class/rfkill/rfkill0/state
     chown bluetooth net_bt_stack /sys/class/rfkill/rfkill0/state
     chown bluetooth net_bt_stack /sys/class/rfkill/rfkill0/type
 
+# bluetooth LPM
+    chmod 0220 /proc/bluetooth/sleep/lpm
+    chmod 0220 /proc/bluetooth/sleep/btwrite
+    chown bluetooth net_bt_stack /proc/bluetooth/sleep/lpm
+    chown bluetooth net_bt_stack /proc/bluetooth/sleep/btwrite
+
+# Broadcom NFC
+    chmod 0600 /dev/bcm2079x
+    chown nfc nfc /dev/bcm2079x
+    mkdir /data/bcmnfc
+    mkdir /data/bcmnfc/param
+    chmod 0700 /data/bcmnfc
+    chmod 0700 /data/bcmnfc/param
+    chown nfc nfc /data/bcmnfc
+    chown nfc nfc /data/bcmnfc/param
+
+# AuthenTec IPSec VPN
+    insmod system/lib/modules/vpnclient.ko ssh_procfs_uid=1000 ssh_procfs_gid=1000
+
+# for SPRINT/VMU/CRI Chameleon feature #
+on init
+    mkdir /carrier 0771 system system
+
+on fs
+    wait /dev/block/platform/msm_sdcc.1/by-name/carrier
+    mount ext4 /dev/block/platform/msm_sdcc.1/by-name/carrier /carrier nosuid nodev barrier=1
+    chown system system /carrier
+    chmod 0771 /carrier
+# End of Chameleon #
+on property:persist.sys.storage_preload=1
+    wait /dev/block/platform/msm_sdcc.1/by-name/hidden
+    check_fs /dev/block/platform/msm_sdcc.1/by-name/hidden ext4
+    mount ext4 /dev/block/platform/msm_sdcc.1/by-name/hidden /preload nosuid nodev noatime wait ro
+    setprop storage.preload.complete 1
+
+on property:persist.sys.storage_preload=0
+    exec /system/bin/umount /preload
+    
+# AuthenTec IPSec VPN
+service vpnclientpm /system/bin/vpnclientpm -u 1000 -O /data/data/com.ipsec.vpnclient/vpnclientpm.txt
+    group system net_admin net_raw
+    disabled
+
+service secstarter /system/bin/secstarter
+    class main
+    user system
+    group system
+
+on property:vpnclientpm.enable=1
+    start vpnclientpm
+	
+on property:vpnclientpm.enable=0
+    stop vpnclientpm
     # Sensor - soft iron
     write /sys/class/input/input5/static_matrix "9665 -302 -5 -268 10196 146 83 645 10159"
     write /sys/class/input/input6/static_matrix "9665 -302 -5 -268 10196 146 83 645 10159"
